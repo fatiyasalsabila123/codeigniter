@@ -163,7 +163,7 @@
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-    <form action="connect_login.php" method="post" id="validate_form">
+    <form action="<?php echo base_url();?>Auth/aksi_login" method="post" id="validate_form">
         <h3>Login Here</h3>
 
         <label for="email">Email</label>
