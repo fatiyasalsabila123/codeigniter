@@ -532,6 +532,12 @@ body {
             <span>Menu</span>
           </li>
           <li>
+            <a href="admin">
+            <i class="fas fa-chart-line"></i> 
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
             <a href="admin/siswa">
             <i class="fas fa-user-graduate"></i>
               <span>Siswa</span>
@@ -570,44 +576,14 @@ body {
         </ul>
       </div>
     </div>
+    <div class="sidebar-footer">
+      <a href="<?php echo base_url('auth/logout');?>">
+      <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
   </nav>
-<nav class="navbar bg-body-tertiary">
-  <div class="container-fluid">
-  </div>
-</nav>
-  <!-- sidebar-wrapper  -->
-  <!-- <main class="page-content">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">          
-          <div class="card rounded-0 p-0 shadow">
-            <div class="card-body text-center bg-primary">
-                <h6 class="card-title text-white">Angular Pro Sidebar</h6>
-            </div>
-          </div>          
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">          
-          <div class="card rounded-0 p-0 shadow">
-            <div class="card-body text-center bg-primary">
-                <h6 class="card-title text-white">Angular Pro Sidebar</h6>
-            </div>
-          </div>          
-        </div>
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">          
-          <div class="card rounded-0 p-0 shadow">
-            <div class="card-body text-center bg-primary">
-                <h6 class="card-title text-white">Angular Dashboard</h6>
-            </div>
-          </div>          
-        </div>
-      </div>
-    </div>
-
-  </main> -->
- 
 </div>
-<!-- page-wrapper -->
-    </div>
     <script>
  $(".sidebar-dropdown > a").click(function() {
   $(".sidebar-submenu").slideUp(200);
@@ -640,6 +616,8 @@ $("#show-sidebar").click(function() {
 
 
 </script>
+<!-- page-wrapper -->
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>

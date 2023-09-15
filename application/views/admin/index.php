@@ -34,7 +34,7 @@
                 <h6 class="card-title text-white">Angular Pro Sidebar</h6>
                 <!-- <a href="https://github.com/azouaoui-med/angular-pro-sidebar" target="_blank" class="btn btn-primary btn-sm">Github</a>
                 <a href="https://azouaoui-med.github.io/angular-pro-sidebar/demo/" target="_blank" class="btn btn-success btn-sm">Preview</a> -->
-            </div>
+            </div>z
           </div>          
         </div>
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-2">          

@@ -20,21 +20,25 @@
       <th scope="col">Nama Siswa</th>
       <th scope="col">Gender</th>
       <th scope="col">Nisn</th>
+      <th scope="col">Kelas</th>
+      <!-- <th scope="col">Nama Sekolah</th> -->
       <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
     <?php 
-        foreach ($result as $row):
+      $no=0; foreach ($ambil_dari_sini as $row): $no++
     ?>
     <tr>
       <th scope="row"><?= $row->id_siswa?></th>
       <td><?= $row->nama_siswa;?></td>
       <td><?= $row->gender;?></td>
       <td><?= $row->nisn;?></td>
+      <td><?= $row->tingkat_kelas. ' ' . $row->jurusan_kelas;?></td>
+      <!-- <td><?= $row->nama_sekolah;?></td> -->
       <td>
         <button class="btn btn-sm btn-primary">Edit</button>
-        <button class="btn btn-sm btn-danger">Hapus</button>
+        <button class="btn btn-sm btn-danger" onclick="hapus(<?php echo $row->id_siswa?>)">Hapus</button>
       </td>
     </tr>
     <?php endforeach;?>
@@ -42,4 +46,13 @@
 </table>
         </div>
 </body>
+
+<script>
+        function hapus(id) { // Fungsi JavaScript untuk mengkonfirmasi dan mengarahkan ke halaman "delete.php" dengan id yang akan dihapus.
+            var yes = confirm("Yakin Di Hapus?");
+            if (yes == true) {
+                window.location.href = "<?php echo base_url('admin/hapus_siswa/')?>" + id; // Mengarahkan ke halaman "hapus_siswa.php" dengan mengirimkan id yang akan dihapus sebagai parameter.
+            }
+        }
+    </script>
 </html>
