@@ -19,8 +19,11 @@ class Admin extends CI_Controller {
 
     public function index()
     {
+        
+        // $data['ambil_dari_sini'] = $this->m_model->get_siswa('siswa')->num_rows;
         // Memuat tampilan halaman admin/index
         $this->load->view('admin/index');
+        // $this->load->view('admin/index', $data);
     }
 
     public function siswa() {
@@ -50,9 +53,33 @@ class Admin extends CI_Controller {
         redirect(base_url('admin/siswa'));
     }
 
-    public function update_siswa() {
-        $this->load->view('admin/update_siswa');
+    // public function update_siswa() {
+    //     $this->load->view('admin/update_siswa');
+    // }
+
+    public function update_siswa($id) {
+    $data['siswa'] = $this->m_model->get_by_id('siswa', 'id_siswa', $id)->result();
+    $data['kelas'] = $this->m_model->get_data('kelas')->result();
+    $this->load->view('admin/update_siswa', $data);
+}
+
+public function aksi_ubah_siswa(){
+    $data = array (
+        'nama_siswa' => $this->input->post('nama'),
+        'nisn' => $this->input->post('nisn'),
+        'gender' => $this->input->post('gender'),
+        'id_kelas' => $this->input->post('kelas'),
+    );
+    $eksekusi=$this->m_model->ubah_data('siswa', $data, array('id_siswa' =>$this->input->post('id_siswa')));
+    if ($eksekusi) {
+        // $this->session->set_flashdata('sukses', 'berhasil');
+        redirect(base_url('admin/siswa'));
+    } else {
+        // $this->session->set_flashdata('error', 'gagal');
+        redirect(base_url('admin/siswa/upate_siswa'.$this->input->post('id_siswa')));
     }
+}
+
 }
 ?>
     

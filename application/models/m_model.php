@@ -42,5 +42,17 @@
             $this->db->insert($table, $data);
             return $this->db->insert_id();
         }
+
+        public function get_by_id($table, $id_column, $id) {
+            $data = $this->db->where($id_column, $id)->get($table);
+            return $data;
+        }
+        
+        public function ubah_data($table, $data, $where) {
+            $this->db->where($where);
+            $this->db->update($table, $data);
+            return $this->db->affected_rows();
+        }
+        
     }
 ?>

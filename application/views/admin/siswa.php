@@ -37,7 +37,7 @@
       <td><?= $row->tingkat_kelas. ' ' . $row->jurusan_kelas;?></td>
       <!-- <td><?= $row->nama_sekolah;?></td> -->
       <td>
-        <button class="btn btn-sm btn-primary">Edit</button>
+        <a href="<?php echo base_url('admin/update_siswa/').$row->id_siswa?>" class="btn btn-sm btn-primary">Edit</a>
         <button class="btn btn-sm btn-danger" onclick="hapus(<?php echo $row->id_siswa?>)">Hapus</button>
       </td>
     </tr>
