@@ -40,6 +40,11 @@
                         <?php endforeach;?></option>
             </select>
             </div>
+            <div class="mb-3 col-6">
+                <label for="konfirmasi_password" class="form-label">Foto</label>
+                <!-- Input field untuk konfirmasi password (biarkan kosong jika tidak ingin mengubahnya) -->
+                <input type="file" name="foto" class="form-control" id="foto">
+            </div>
             <!-- Tombol "Submit" untuk mengirim data ke server -->
             <button type="submit" class="btn btn-primary" name="submit">Submit</button>
         </form>

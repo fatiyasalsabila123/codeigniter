@@ -41,7 +41,7 @@
                     <?php echo tampil_full_kelas_byid($data_siswa->id_kelas)?>
                 </option>
                     <?php foreach($kelas as $row):?>
-                        <option value="<?php echo $row->id ?>">
+                        <option value="<?php echo $row->id?>">
                         <?php echo $row->tingkat_kelas. ' ' . $row->jurusan_kelas?>
                         <?php endforeach;?></option>
             </select>

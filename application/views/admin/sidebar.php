@@ -516,10 +516,10 @@ body {
             alt="User picture">
         </div>
         <div class="user-info">
-          <span class="user-name">Fatiya
-            <strong>Salsabila</strong>
+          <span class="user-name">
+            <strong><?= $this->fungsi->admin_login()->username?></strong>
           </span>
-          <span class="user-role">Administrator</span>
+          <span class="user-role"><?= $this->fungsi->admin_login()->email?></span>
           <span class="user-status">
             <i class="fa fa-circle"></i>
             <span>Online</span>
