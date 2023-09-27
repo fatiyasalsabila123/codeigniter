@@ -96,6 +96,12 @@ class M_model extends CI_Model
         $query = $this->db->get();
         return $query; // Tidak perlu row() di sini
     }
+
+    public function get_all_admin()
+    {
+        // Ambil semua data admin
+        return $this->db->get('admin')->result();
+    }
     
     
 

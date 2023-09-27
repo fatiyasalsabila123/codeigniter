@@ -19,6 +19,7 @@ class Admin extends CI_Controller
         }
     }
 
+    //dashboard admin
     public function index()
     {
         // Memuat tampilan halaman admin/index
@@ -26,14 +27,22 @@ class Admin extends CI_Controller
         // $this->load->view('admin/index', $data);
     }
 
-    public function upload_image($value)  {
+    // dashboard keuangan 
+    public function dashboard()
+    {
+        $this->load->view('admin/dashboard');
+    }
+
+    //upload gambar siswa 
+    public function upload_image($value)
+    {
         $kode = round(microtime(true) * 1000);
         $config['upload_path'] = './images/siswa/';
         $config['allowed_types'] = 'jpg|png|jpeg|webp';
         $config['max_size'] = '30000';
         $config['file_name'] = $kode;
         $this->upload->initialize($config);
-        if(!$this->upload->do_upload($value)) {
+        if (!$this->upload->do_upload($value)) {
             return array(false, '');
         } else {
             $fn = $this->upload->data();
@@ -41,7 +50,9 @@ class Admin extends CI_Controller
             return array(true, $nama);
         }
     }
+    //end upload gambar siswa
 
+    //start siswa
     public function siswa()
     {
         $data['ambil_dari_sini'] = $this->m_model->get_siswa();
@@ -81,7 +92,7 @@ class Admin extends CI_Controller
                 'gender' => $this->input->post('gender'),
                 'id_kelas' => $this->input->post('kelas'),
             ];
-    
+
             $this->m_model->tambah_data('siswa', $data);
             redirect(base_url('admin/siswa'));
         }
@@ -112,24 +123,53 @@ class Admin extends CI_Controller
             redirect(base_url('admin/siswa/upate_siswa' . $this->input->post('id_siswa')));
         }
     }
+    //end siswa
 
+    //Bagian Admin
     public function akun()
     {
         $data['admin'] = $this->m_model->get_by_id('admin', 'id', $this->session->userdata('id'))->result();
         $this->load->view('admin/akun', $data);
     }
 
+    public function upload_image_admin($value)
+    {
+        $kode = round(microtime(true) * 1000);
+        $config['upload_path'] = './images/admin/';
+        $config['allowed_types'] = 'jpg|png|jpeg|webp';
+        $config['max_size'] = '30000';
+        $config['file_name'] = $kode;
+        $this->upload->initialize($config);
+        if (!$this->upload->do_upload($value)) {
+            return array(false, '');
+        } else {
+            $fn = $this->upload->data();
+            $nama = $fn['file_name'];
+            return array(true, $nama);
+        }
+    }
+
     public function aksi_ubah_akun()
     {
+        $foto = $this->upload_image_admin('foto');
         $password_baru = $this->input->post('password_baru');
         $konfirmasi_password = $this->input->post('konfirmasi_password');
         $email = $this->input->post('email');
         $username = $this->input->post('username');
 
-        $data = [
-            'email' => $email,
-            'username' => $username
-        ];
+        if ($foto[0] == false) {
+            $data = [
+                'email' => $email,
+                'username' => $username,
+                'foto' => 'user.webp'
+            ];
+        } else {
+            $data = [
+                'email' => $email,
+                'username' => $username,
+                'foto' => $foto[1]
+            ];
+        }
 
         //jika ada password baru
         if (!empty($password_baru)) {
@@ -141,14 +181,28 @@ class Admin extends CI_Controller
                 redirect(base_url('admin/akun'));
             }
         }
+
         //lakukan pemberuan data
         $this->session->set_userdata($data);
         $update_result = $this->m_model->ubah_data('admin', $data, array('id' => $this->session->userdata('id')));
         if ($update_result) {
-            redirect(base_url('admin/akun'));
+            redirect(base_url('admin/admin'));
         } else {
             redirect(base_url('admin/akun'));
         }
     }
+
+    public function update_admin($id) {
+        $data['update_admin'] = $this->m_model->get_by_id('admin', 'id', $id)->result();
+        $this->load->view('admin/akun', $data);
+    }
+
+    public function admin()
+    {
+        $data['adminn'] = $this->m_model->get_all_admin();
+        $this->load->view('admin/admin', $data);
+    }
+
+    //end Admin
 }
 ?>
