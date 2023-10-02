@@ -11,7 +11,7 @@
         <h3 class="text-center">Update</h3>
         <?php foreach($siswa as $data_siswa): ?>
         <form method="post" class="row" action="<?php echo base_url('admin/aksi_ubah_siswa')?>" enctype="multipart/form-data">
-                <input type="hidden" name="id_siswa" class="form-control" id="nama" value="<?php echo $data_siswa->id_siswa ?>">
+              get_all_mapel
             <div class="mb-3 col-6">
                 <label for="nama" class="form-label">Nama Siswa</label>
                 <!-- Input field untuk nama sekolah -->
@@ -46,6 +46,12 @@
                         <?php endforeach;?></option>
             </select>
             </div>
+            <div class="mb-3 col-6">
+                <label for="nisn" class="form-label">foto</label>
+                <!-- Input field untuk foto -->
+                <input type="file" name="foto" class="form-control" id="foto" value="<?php echo $data_siswa->foto?>">
+            </div>
+            <div clas
             <!-- Tombol "Submit" untuk mengirim data ke server -->
             <button type="submit" class="btn btn-primary" name="submit">Submit</button>
         </form>

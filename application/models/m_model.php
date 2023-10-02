@@ -74,21 +74,23 @@ class M_model extends CI_Model
         }
     }
 
-    public function login($post) {
+    public function login($post)
+    {
         $this->db->select('*');
         $this->db->from('admin');
         $this->db->where('username', $post['username']);
         $this->db->where('password', sha1($post['password'])); // Menggunakan sha1 untuk password
         $query = $this->db->get();
-    
+
         if ($query->num_rows() == 1) { // Periksa apakah ada hasil yang sesuai
             return $query->row(); // Mengembalikan objek admin
         } else {
             return false; // Jika tidak ada hasil yang sesuai
         }
     }
-    
-    public function get($id = null) {
+
+    public function get($id = null)
+    {
         $this->db->from('admin');
         if ($id != null) {
             $this->db->where('id', $id);
@@ -102,8 +104,75 @@ class M_model extends CI_Model
         // Ambil semua data admin
         return $this->db->get('admin')->result();
     }
-    
-    
+
+
+    //get guru
+    public function get_guru()
+    {
+        //memilih kolom yang akan diambil dari tabel guru
+        $this->db->select('guru.*, mapel.nama_mapel');
+
+        // mengatur submber data untuk query dari tabel guru 
+        $this->db->from('guru');
+
+        //menggunkan metode join untuk menggabungkan tabel guru dengn tabel kelas
+        // berdasarkan kolom "id_mapel" yang ada di kedua tabel
+        // "left" mengidikasikan jenis join yang digunakan (left join)
+        $this->db->join('mapel', 'guru.id_mapel = mapel.id', 'left');
+
+        //menjalankan query
+        $query = $this->db->get();
+
+        //mengembalikan hasil query dalam bentuk objek
+        return $query->result();
+    }
+
+    // get data pembayaran
+    public function get_pembayaran()
+    {
+        $this->db->select('pembayaran.*, siswa.nama_siswa');
+        $this->db->from('pembayaran');
+        $this->db->join('siswa', 'pembayaran.id_siswa = siswa.id_siswa', 'left');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    //get data kelas 
+    public function get_kelas() {
+        $this->db->select('kelas.*, sekolah.nama_sekolah, guru.nama_guru');
+        $this->db->from('kelas');
+        $this->db->join('sekolah', 'kelas.id_sekolah = sekolah.id', 'left');
+        $this->db->join('guru', 'kelas.id_guru_walikelas = guru.id', 'left');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    //get data alokasi mapel 
+    public function get_alokasi_mapel() {
+        $this->db->select('alokasi_mapel.*, mapel.nama_mapel, kelas.tingkat_kelas, kelas.jurusan_kelas');
+        $this->db->from('alokasi_mapel');
+        $this->db->join('mapel', 'alokasi_mapel.id_mapel = mapel.id', 'left');
+        $this->db->join('kelas', 'alokasi_mapel.id_kelas = kelas.id', 'left');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    //get siswa foto by id
+    public function get_siswa_foto_by_id($id_siswa)
+{
+    $this->db->select('foto');
+    $this->db->from('siswa');
+    $this->db->where('id_siswa', $id_siswa);
+    $query = $this->db->get();
+
+    if ($query->num_rows() > 0) {
+        $result = $query->row();
+        return $result->foto;
+    } else {
+        return false;
+    }
+}
+
 
 }
 ?>

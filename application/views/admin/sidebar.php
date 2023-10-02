@@ -527,53 +527,68 @@ body {
         </div>
       </div>
       <div class="sidebar-menu">
+        <?php if ($this->session->userdata('role') === 'admin'):?>
         <ul>
           <li class="header-menu">
             <span>Menu</span>
           </li>
           <li>
-            <a href="admin">
+            <a href="index">
             <i class="fas fa-chart-line"></i> 
               <span>Dashboard</span>
             </a>
           </li>
           <li>
-            <a href="admin/siswa">
+            <a href="<?php echo base_url('admin/siswa')?>">
             <i class="fas fa-user-graduate"></i>
               <span>Siswa</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="data_alokasi_mapel">
             <i class="fas fa-user-graduate"></i>
-              <span>Alokasi Guru</span>
+              <span>Alokasi Mapel</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="data_mapel">
             <i class="fas fa-user-graduate"></i>
               <span>Mapel</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="data_guru">
             <i class="fas fa-user-graduate"></i>
               <span>Guru</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="data_kelas">
             <i class="fas fa-user-graduate"></i>
               <span>Kelas</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="data_sekolah">
             <i class="fas fa-user-graduate"></i>
               <span>Sekolah</span>
             </a>
           </li>
         </ul>
+        <?php endif;?>
+        <?php if ($this->session->userdata('role') === 'keuangan'):?>
+          <ul>
+          <li class="header-menu">
+            <span>Menu</span>
+          </li>
+          <li>
+            <a href="index">
+            <i class="fas fa-chart-line"></i> 
+              <span>Dashboard</span>
+            </a>
+          </li>
+          </ul>
+          <?php endif;?>
       </div>
     </div>
     <div class="sidebar-footer">
