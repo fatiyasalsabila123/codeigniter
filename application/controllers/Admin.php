@@ -2,6 +2,9 @@
 // Mendefinisikan bahwa akses langsung ke file ini tidak diperbolehkan
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Admin extends CI_Controller
 {
 
@@ -294,39 +297,43 @@ class Admin extends CI_Controller
         $this->load->view('admin/guru/tambah_guru', $data);
     }
     //aksi tambah guru
-    public function aksi_tambah_guru() {
+    public function aksi_tambah_guru()
+    {
         $data = [
             'nama_guru' => $this->input->post('nama_guru'),
             'nik' => $this->input->post('nik'),
             'gender' => $this->input->post('gender'),
             'id_mapel' => $this->input->post('mapel'),
         ];
-       $eksekusi =  $this->m_model->tambah_data('guru', $data);
-       if ($eksekusi) {
-        $this->session->set_flashdata('berhasil', 'Berhasil Menambahkan Data Guru Yeyy');
-        redirect(base_url('admin/data_guru'));
-       } else {
-        $this->session->set_flashdata('gagal', 'Gagal Menambahkan Data Huhuu');
-        redirect(base_url('admin/guru/tambah_guru'));
-       }
+        $eksekusi = $this->m_model->tambah_data('guru', $data);
+        if ($eksekusi) {
+            $this->session->set_flashdata('berhasil', 'Berhasil Menambahkan Data Guru Yeyy');
+            redirect(base_url('admin/data_guru'));
+        } else {
+            $this->session->set_flashdata('gagal', 'Gagal Menambahkan Data Huhuu');
+            redirect(base_url('admin/guru/tambah_guru'));
+        }
     }
 
     //delete data guru
-    public function hapus_guru($id) {
+    public function hapus_guru($id)
+    {
         $this->m_model->delete('guru', 'id', $id);
         redirect(base_url('admin/data_guru'));
     }
     //end function guru
 
     // edit guru 
-    public function edit_guru($id) {
+    public function edit_guru($id)
+    {
         $data['guru'] = $this->m_model->get_by_id('guru', 'id', $id)->result();
         $data['mapel'] = $this->m_model->get_data('mapel')->result();
         $this->load->view('admin/guru/edit_guru', $data);
     }
 
     //aksi edit guru
-    public function aksi_ubah_guru() {
+    public function aksi_ubah_guru()
+    {
         $data = [
             'nama_guru' => $this->input->post('nama_guru'),
             'gender' => $this->input->post('gender'),
@@ -350,7 +357,8 @@ class Admin extends CI_Controller
     }
 
     //tambah data mapel
-    public function tambah_mapel() {
+    public function tambah_mapel()
+    {
         $data = [
             'nama_mapel' => $this->input->post('nama_mapel'),
         ];
@@ -365,7 +373,8 @@ class Admin extends CI_Controller
     }
 
     // hapus data mapel 
-    public function hapus_mapel($id) {
+    public function hapus_mapel($id)
+    {
         $this->m_model->delete('mapel', 'id', $id);
         redirect(base_url('admin/data_mapel'));
     }
@@ -387,14 +396,15 @@ class Admin extends CI_Controller
     }
 
     //tambah kelas
-    public function tambah_kelas() {
+    public function tambah_kelas()
+    {
         $data = [
             'tingkat_kelas' => $this->input->post('tingkat_kelas'),
             'jurusan_kelas' => $this->input->post('jurusan_kelas'),
             'id_sekolah' => $this->input->post('nama_sekolah'),
             'id_guru_walikelas' => $this->input->post('wali_kelas'),
         ];
-        $eksekusi = $this->m_model->tambah_data('kelas',  $data);
+        $eksekusi = $this->m_model->tambah_data('kelas', $data);
         if ($eksekusi) {
             redirect(base_url('admin/data_kelas'));
         } else {
@@ -403,7 +413,8 @@ class Admin extends CI_Controller
     }
 
     // edit_kelas
-    public function edit_kelas($id) {
+    public function edit_kelas($id)
+    {
         $data['kelas'] = $this->m_model->get_by_id('kelas', 'id', $id)->result();
         $data['sekolah'] = $this->m_model->get_data('sekolah')->result();
         $data['wali_kelas'] = $this->m_model->get_data('guru')->result();
@@ -411,7 +422,8 @@ class Admin extends CI_Controller
     }
 
     //aksi edit kelas
-    public function aksi_edit_kelas() {
+    public function aksi_edit_kelas()
+    {
         $data = [
             'tingkat_kelas' => $this->input->post('tingkat_kelas'),
             'jurusan_kelas' => $this->input->post('jurusan_kelas'),
@@ -421,14 +433,15 @@ class Admin extends CI_Controller
 
         $eksekusi = $this->m_model->ubah_data('kelas', $data, array('id' => $this->input->post('id')));
         if ($eksekusi) {
-           redirect(base_url('admin/data_kelas'));
+            redirect(base_url('admin/data_kelas'));
         } else {
             redirect(base_url('admin/edit_kelas/' . $this->input->post('id')));
         }
     }
 
     //hapus kelas
-    public function hapus_kelas($id) {
+    public function hapus_kelas($id)
+    {
         $this->m_model->delete('kelas', 'id', $id);
         redirect(base_url('admin/data_kelas'));
     }
@@ -441,6 +454,141 @@ class Admin extends CI_Controller
         $data['alokasi_mapel'] = $this->m_model->get_alokasi_mapel('alokasi_mapel');
         $this->load->view('admin/alokasi_mapel/data_alokasi_mapel', $data);
     }
+
+    //function export
+    public function export()
+    {
+        require_once FCPATH . 'vendor/autoload.php';
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $style_col = [
+            'font' => ['bold' => true],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\style\Alignment::VERTICAL_CENTER
+            ],
+            'borders' => [
+                'top' => ['borderstyle' => \PhpOffice\PhpSpreadsheet\style\Border::BORDER_THIN],
+                'right' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\style\Border::BORDER_THIN],
+                'left' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\style\Border::BORDER_THIN]
+            ]
+        ];
+
+        $style_row = [
+            'alignment' => [
+                'vertical' => \PhpOffice\PhpSpreadsheet\style\Alignment::VERTICAL_CENTER
+            ],
+            'borders' => [
+                'top' => ['borderstyle' => \PhpOffice\PhpSpreadsheet\style\Border::BORDER_THIN],
+                'right' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\style\Border::BORDER_THIN],
+                'left' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\style\Border::BORDER_THIN]
+            ]
+        ];
+
+        $sheet->setCellValue('A1', "DATA SISWA");
+        $sheet->mergeCells('A1:E1');
+        $sheet->getStyle('A1')->getFont()->setBold(true);
+
+        $sheet->setCellValue('A3', "NO");
+        $sheet->setCellValue('B3', "NAMA SISWA");
+        $sheet->setCellValue('C3', "NISN");
+        $sheet->setCellValue('D3', "GENDER");
+        $sheet->setCellValue('E3', "KELAS");
+        $sheet->setCellValue('F3', "FOTO");
+
+        $sheet->getStyle('A3')->applyFromArray($style_col);
+        $sheet->getStyle('B3')->applyFromArray($style_col);
+        $sheet->getStyle('C3')->applyFromArray($style_col);
+        $sheet->getStyle('D3')->applyFromArray($style_col);
+        $sheet->getStyle('E3')->applyFromArray($style_col);
+        $sheet->getStyle('F3')->applyFromArray($style_col);
+
+        $data_siswa = $this->m_model->get_siswa();
+
+        $no = 1;
+        $numrow = 4;
+        foreach ($data_siswa as $data) {
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, $data->nama_siswa);
+            $sheet->setCellValue('C' . $numrow, $data->nisn);
+            $sheet->setCellValue('D' . $numrow, $data->gender);
+            $sheet->setCellValue('E' . $numrow, $data->tingkat_kelas . '' . $data->jurusan_kelas);
+            $sheet->setCellValue('F' . $numrow, $data->foto);
+
+            $sheet->getStyle('A' . $numrow)->applyFromArray($style_row);
+            $sheet->getStyle('B' . $numrow)->applyFromArray($style_row);
+            $sheet->getStyle('C' . $numrow)->applyFromArray($style_row);
+            $sheet->getStyle('D' . $numrow)->applyFromArray($style_row);
+            $sheet->getStyle('E' . $numrow)->applyFromArray($style_row);
+            $sheet->getStyle('F' . $numrow)->applyFromArray($style_row);
+
+            $no++;
+            $numrow++;
+        }
+
+        $sheet->getColumnDimension('A')->setWidth(5);
+        $sheet->getColumnDimension('B')->setWidth(25);
+        $sheet->getColumnDimension('C')->setWidth(25);
+        $sheet->getColumnDimension('D')->setWidth(20);
+        $sheet->getColumnDimension('E')->setWidth(30);
+        $sheet->getColumnDimension('F')->setWidth(30);
+        $sheet->getColumnDimension('G')->setWidth(30);
+        $sheet->getColumnDimension('H')->setWidth(35);
+
+        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+
+        $sheet->setTitle("LAPORAN DATA SISWA");
+        header('Content-Type: aplication/vnd.openxmlformants-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="SISWA.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+    }
+
+    // function import 
+    // import
+    public function import()
+    {
+        require_once FCPATH . 'vendor/autoload.php';
+        if (isset($_FILES["file"]["name"])) {
+            $path = $_FILES["file"]["tmp_name"];
+            $object = PhpOffice\PhpSpreadsheet\IOFactory::load($path);
+            foreach ($object->getWorksheetIterator() as $worksheet) {
+                $highestRow = $worksheet->getHighestRow();
+                // $highestColumn = $worksheet->getHighestColumn();
+                for ($row = 4; $row <= $highestRow; $row++) {
+                    $foto = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
+                    $nama_siswa = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
+                    $gender = $worksheet->getCellByColumnAndRow(4, $row)->getValue();
+                    $nisn = $worksheet->getCellByColumnAndRow(5, $row)->getValue();
+                    $tingkat_kelas = $worksheet->getCellByColumnAndRow(6, $row)->getValue();
+                    // echo $nama_siswa;
+
+                    $get_id_by_kelas = $this->m_model->get_by_kelas($tingkat_kelas);
+                    echo $get_id_by_kelas;
+                    $data = array(
+                        'foto' => $foto,
+                        'nama_siswa' => $nama_siswa,
+                        'gender' => $gender,
+                        'nisn' => $nisn,
+                        'id_kelas' => $get_id_by_kelas,
+                    );
+                    $this->m_model->tambah_data('siswa', $data);
+                }
+            }
+            redirect(base_url('admin/siswa'));
+        } else {
+            echo 'Invalid File';
+        }
+    }
+
 
     //end Admin
 }

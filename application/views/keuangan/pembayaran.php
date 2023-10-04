@@ -16,8 +16,10 @@
         <div class="d-flex justify-content-between">
             <h3 class="text-center">Data Pembayaraan Spp</h3>
             <div class="d-flex" style="gap:10px">
-                <button class="btn btn-sm btn-primary"><a href="export"
-                        style="color:white; text-decoration:none">Export</a></button>
+            <button  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        style="color:white; text-decoration:none">Import</button>
+                <button  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        style="color:white; text-decoration:none"><a href="<?php echo base_url('keuangan/export')?>" style="color:white; text-decoration:none">Export</a></button>
                 <button class="btn btn-sm btn-primary"><a href="tambah_pembayaran"
                         style="color:white; text-decoration:none">Tambah Data</a></button>
             </div>
@@ -62,6 +64,31 @@
             </tbody>
         </table>
     </div>
+
+    <!-- modal export  -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Export File</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form action="<?php echo base_url('keuangan/import')?>" method="post" enctype="multipart/form-data">
+      <div class="modal-body">
+      <div class="mb-3 col-6">
+                <label for="export" class="form-label">File Xlsx</label>
+                <input type="file" name="file" class="form-control" id="total_pembayaran">
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" name="import" class="btn btn-primary">Save changes</button>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
 </body>
 <script>
     function hapus(id) { // Fungsi JavaScript untuk mengkonfirmasi dan mengarahkan ke halaman "delete.php" dengan id yang akan dihapus.

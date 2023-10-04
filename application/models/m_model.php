@@ -138,7 +138,8 @@ class M_model extends CI_Model
     }
 
     //get data kelas 
-    public function get_kelas() {
+    public function get_kelas()
+    {
         $this->db->select('kelas.*, sekolah.nama_sekolah, guru.nama_guru');
         $this->db->from('kelas');
         $this->db->join('sekolah', 'kelas.id_sekolah = sekolah.id', 'left');
@@ -148,7 +149,8 @@ class M_model extends CI_Model
     }
 
     //get data alokasi mapel 
-    public function get_alokasi_mapel() {
+    public function get_alokasi_mapel()
+    {
         $this->db->select('alokasi_mapel.*, mapel.nama_mapel, kelas.tingkat_kelas, kelas.jurusan_kelas');
         $this->db->from('alokasi_mapel');
         $this->db->join('mapel', 'alokasi_mapel.id_mapel = mapel.id', 'left');
@@ -159,20 +161,49 @@ class M_model extends CI_Model
 
     //get siswa foto by id
     public function get_siswa_foto_by_id($id_siswa)
-{
-    $this->db->select('foto');
-    $this->db->from('siswa');
-    $this->db->where('id_siswa', $id_siswa);
-    $query = $this->db->get();
+    {
+        $this->db->select('foto');
+        $this->db->from('siswa');
+        $this->db->where('id_siswa', $id_siswa);
+        $query = $this->db->get();
 
-    if ($query->num_rows() > 0) {
-        $result = $query->row();
-        return $result->foto;
-    } else {
-        return false;
+        if ($query->num_rows() > 0) {
+            $result = $query->row();
+            return $result->foto;
+        } else {
+            return false;
+        }
     }
-}
 
+    public function get_by_nisn($nisn)
+    {
+        $this->db->select('id_siswa');
+        $this->db->from('siswa');
+        $this->db->where('nisn', $nisn);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            $result = $query->row();
+            return $result->id_siswa;
+        } else {
+            return false;
+        }
+    }
+
+    public function get_by_kelas($tingkat_kelas)
+    {
+        $this->db->select('id');
+        $this->db->from('kelas');
+        $this->db->where('tingkat_kelas', $tingkat_kelas);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            $result = $query->row();
+            return $result->id;
+        } else {
+            return false;
+        }
+    }
 
 }
 ?>
