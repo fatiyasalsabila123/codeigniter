@@ -15,7 +15,7 @@ class Keuangan extends CI_Controller
     $this->load->helper('my_helper');
 
     // Mengecek apakah pengguna telah login, jika tidak, maka akan diarahkan ke halaman login
-    if ($this->session->userData('logged_in') != true && $this->session->userData('role') != 'keuangan') {
+    if ($this->session->userData('logged_in') != true || $this->session->userData('role') != 'keuangan') {
       redirect(base_url() . 'auth');
     }
   }
@@ -139,6 +139,22 @@ class Keuangan extends CI_Controller
       redirect(base_url('keuangan/pembayaran'));
     } else {
       echo 'File Tidak Valid';
+    }
+  }
+
+  //export pembayaran 
+  public function export_pembayaran()
+  {
+    $data['data_pembayaran']= $this->m_model->get_data('pembayaran')->result();
+    $data['nama'] = 'pembayaran';
+    // segment untuk mengecek /mengambil url
+    if ($this->uri->segment(3)== "pdf") {
+      $this->load->library('pdf');
+      $this->pdf->load_view('keuangan/export_data_pembayaran', $data);
+      $this->pdf->render();
+      $this->pdf->stream("data_pembayaran.pdf", array("Attachment" => false));
+    }else{
+      $this->load->view('keuangan/download_data_pembayaran',$data);
     }
   }
 

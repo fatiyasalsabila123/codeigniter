@@ -11,7 +11,7 @@
         <h3 class="text-center">Update</h3>
         <?php foreach($siswa as $data_siswa): ?>
         <form method="post" class="row" action="<?php echo base_url('admin/aksi_ubah_siswa')?>" enctype="multipart/form-data">
-              get_all_mapel
+        <input type="hidden" name="id_siswa" class="form-control" value="<?php echo $data_siswa->id_siswa ?>">
             <div class="mb-3 col-6">
                 <label for="nama" class="form-label">Nama Siswa</label>
                 <!-- Input field untuk nama sekolah -->

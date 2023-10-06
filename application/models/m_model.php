@@ -119,6 +119,7 @@ class M_model extends CI_Model
         // berdasarkan kolom "id_mapel" yang ada di kedua tabel
         // "left" mengidikasikan jenis join yang digunakan (left join)
         $this->db->join('mapel', 'guru.id_mapel = mapel.id', 'left');
+        $this->db->join('kelas', 'kelas.id_guru_walikelas = guru.id', 'left');
 
         //menjalankan query
         $query = $this->db->get();

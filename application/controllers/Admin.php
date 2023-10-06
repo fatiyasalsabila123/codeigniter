@@ -17,7 +17,7 @@ class Admin extends CI_Controller
         $this->load->library('upload');
 
         // Mengecek apakah pengguna telah login, jika tidak, maka akan diarahkan ke halaman login
-        if ($this->session->userData('logged_in') != true && $this->session->userData('role') != 'admin') {
+        if ($this->session->userData('logged_in') != true || $this->session->userData('role') != 'admin') {
             redirect(base_url() . 'auth');
         }
     }
@@ -179,7 +179,7 @@ class Admin extends CI_Controller
                 ];
             } else {
                 // Gagal mengunggah foto baru
-                redirect(base_url('admin/ubah_siswa/' . $this->input->post('id_siswa')));
+                redirect(base_url('admin/update_siswa/' . $this->input->post('id_siswa')));
             }
         } else {
             // Jika tidak ada foto yang diunggah
@@ -197,7 +197,7 @@ class Admin extends CI_Controller
         if ($eksekusi) {
             redirect(base_url('admin/siswa'));
         } else {
-            redirect(base_url('admin/ubah_siswa/' . $this->input->post('id_siswa')));
+            redirect(base_url('admin/update_siswa/' . $this->input->post('id_siswa')));
         }
     }
     //end siswa
@@ -347,7 +347,21 @@ class Admin extends CI_Controller
             redirect(base_url('admin/edit_guru/' . $this->input->post('id')));
         }
     }
-
+    //export guru 
+    public function export_guru()
+    {
+        $data['data_guru'] = $this->m_model->get_guru();
+        $data['nama'] = 'guru';
+        // segment untuk mengecek /mengambil url
+        if ($this->uri->segment(3) == "pdf") {
+            $this->load->library('pdf');
+            $this->pdf->load_view('admin/guru/export_data_guru', $data);
+            $this->pdf->render();
+            $this->pdf->stream("data_guru.pdf", array("Attachment" => false));
+        } else {
+            $this->load->view('admin/guru/download_data_guru', $data);
+        }
+    }
     //start function mapel
     //get data mapel
     public function data_mapel()
@@ -562,14 +576,12 @@ class Admin extends CI_Controller
             $object = PhpOffice\PhpSpreadsheet\IOFactory::load($path);
             foreach ($object->getWorksheetIterator() as $worksheet) {
                 $highestRow = $worksheet->getHighestRow();
-                // $highestColumn = $worksheet->getHighestColumn();
                 for ($row = 4; $row <= $highestRow; $row++) {
                     $foto = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
                     $nama_siswa = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
                     $gender = $worksheet->getCellByColumnAndRow(4, $row)->getValue();
                     $nisn = $worksheet->getCellByColumnAndRow(5, $row)->getValue();
                     $tingkat_kelas = $worksheet->getCellByColumnAndRow(6, $row)->getValue();
-                    // echo $nama_siswa;
 
                     $get_id_by_kelas = $this->m_model->get_by_kelas($tingkat_kelas);
                     echo $get_id_by_kelas;
