@@ -51,10 +51,15 @@ function get_all_sekolah($id)
 function get_all_wali_kelas($id) {
     $ci = &get_instance();
     $ci->load->database();//untuk mengelola database
-    $result = $ci->db->where('id_guru_wali_kelas', $id)->get('guru');// mencari dimana kolom id dari tabel guru
-    foreach ($result->result as $row) {
-        $stmt = $row->nama_guru;
-        return $stmt;
+    $result = $ci->db->where('id', $id)->get('guru');// mencari dimana kolom id dari tabel guru
+    if ($result->num_rows() > 0) {
+        // Data ditemukan, mengembalikan nilai id_guru
+        foreach ($result->result() as $c) {
+            $stmt = tampil_full_kelas_byid($c->id);
+            return $stmt;
+        }
+    } else {
+        return "Tidak Menjadi Walikelas";
     }
 } 
 

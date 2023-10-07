@@ -39,13 +39,13 @@
             <td><?php echo $key->nama_guru ?></td>
             <td><?php echo $key->nik ?></td>
             <td><?php echo $key->gender ?></td>
-            <td><?php echo $key->nama_mapel ?></td>
+            <td><?php echo get_all_mapel($key->id_mapel) ?></td>
             <td>
-            <?php if (empty(tampil_full_kelas_byid($key->id))): ?>
-               Tidak Menjadi Wali Kelas
-            <?php else: ?>
-                <?php echo tampil_full_kelas_byid($key->id) ?>
-            <?php endif; ?>
+           <?php if (empty(tampil_full_kelas_byid($key->id))):?>
+            Tidak Menjadi Wali Kelas
+            <?php else:?>
+                <?php echo tampil_full_kelas_byid($key->id)?>
+            <?php endif?>
         </td>
         </tr>
         <?php } ?>

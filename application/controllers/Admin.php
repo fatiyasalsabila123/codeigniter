@@ -350,7 +350,7 @@ class Admin extends CI_Controller
     //export guru 
     public function export_guru()
     {
-        $data['data_guru'] = $this->m_model->get_guru();
+        $data['data_guru'] = $this->m_model->get_data('guru')->result();
         $data['nama'] = 'guru';
         // segment untuk mengecek /mengambil url
         if ($this->uri->segment(3) == "pdf") {
@@ -362,6 +362,8 @@ class Admin extends CI_Controller
             $this->load->view('admin/guru/download_data_guru', $data);
         }
     }
+
+
     //start function mapel
     //get data mapel
     public function data_mapel()
@@ -369,9 +371,13 @@ class Admin extends CI_Controller
         $data['mapel'] = $this->m_model->get_data('mapel')->result();
         $this->load->view('admin/mapel/data_mapel', $data);
     }
-
     //tambah data mapel
-    public function tambah_mapel()
+    public function tambah_mapel() {
+        $data['mapel'] = $this->m_model->get_data('mapel')->result();
+        $this->load->view('admin/mapel/tambah_mapel', $data);
+    }
+    // aksi tambah mapel
+    public function aksi_tambah_mapel()
     {
         $data = [
             'nama_mapel' => $this->input->post('nama_mapel'),
@@ -392,7 +398,27 @@ class Admin extends CI_Controller
         $this->m_model->delete('mapel', 'id', $id);
         redirect(base_url('admin/data_mapel'));
     }
+
+    // edit mapel
+    public function edit_mapel($id) {
+        $data['edit_mapel'] = $this->m_model->get_by_id('mapel', 'id', $id)->result();
+        $this->load->view('admin/mapel/edit_mapel', $data);
+    }
+
+    // aksi edit_mapel
+    public function aksi_edit_mapel() {
+        $data = [
+            'nama_mapel' => $this->input->post('nama_mapel'),
+        ];
+        $eksekusi = $this->m_model->ubah_data('mapel', $data, array('id' => $this->input->post('id')));
+        if ($eksekusi) {
+            redirect(base_url('admin/data_mapel'));
+        } else {
+            redirect(base_url('admin/edit_mapel/' . $this->input->post('id')));
+        }
+    }
     //end function mapel
+
 
     //get data sekolah
     public function data_sekolah()
@@ -401,16 +427,70 @@ class Admin extends CI_Controller
         $this->load->view('admin/sekolah/data_sekolah', $data);
     }
 
+    // tambah sekolah
+    public function tambah_sekolah() {
+        $data['sekolah'] = $this->m_model->get_data('sekolah')->result();
+        $this->load->view('admin/sekolah/tambah_sekolah', $data);
+    }
+
+    // aksi tambah sekolah
+    public function aksi_tambah_sekolah() {
+        $data = [
+            "nama_sekolah" => $this->input->post("nama_sekolah"),
+            "alamat_sekolah" => $this->input->post("alamat_sekolah")
+        ];
+        $eksekusi = $this->m_model->tambah_data('sekolah', $data);
+        if ($eksekusi) {
+            redirect(base_url('admin/data_sekolah'));
+        } else {
+            redirect(base_url('admin/tambah_sekolah'));
+        }
+    }
+
+    // delete sekolah
+    public function delete_sekolah($id) {
+        $this->m_model->delete('sekolah', 'id', $id);
+        redirect(base_url('admin/data_sekolah'));
+    } 
+
+    // edit sekolah
+    public function edit_sekolah($id) {
+        $data['edit_sekolah'] = $this->m_model->get_by_id('sekolah','id', $id)->result();
+        $this->load->view('admin/sekolah/edit_sekolah', $data);
+    }
+
+    // aksi edit sekokah 
+    public function aksi_edit_sekolah() {
+        $data = [
+            "nama_sekolah" => $this->input->post("nama_sekolah"),
+            "alamat_sekolah" => $this->input->post("alamat_sekolah"),
+        ];
+        $eksekusi = $this->m_model->ubah_data('sekolah', $data, array('id' => $this->input->post('id')));
+        if ($eksekusi) {
+            redirect(base_url('admin/data_sekolah'));
+        } else {
+            redirect(base_url('admin/edit_sekolah'. $this->input->post('id')));
+        }
+    }
+
     //start function kelas
     //get data kelas
     public function data_kelas()
     {
-        $data['kelas'] = $this->m_model->get_kelas('kelas');
+        $data['kelas'] = $this->m_model->get_kelas();
         $this->load->view('admin/kelas/data_kelas', $data);
     }
 
-    //tambah kelas
-    public function tambah_kelas()
+    //tambah kelaas
+    public function tambah_kelas() {
+        $data['kelas'] = $this->m_model->get_kelas();
+        $data['sekolahh'] = $this->m_model->get_data('sekolah')->result();
+        $data['guru_walikelas'] = $this->m_model->get_data('guru')->result();
+        $this->load->view('admin/kelas/tambah_kelas', $data);
+    }
+
+    // aksi tambah kelas
+    public function aksi_tambah_kelas()
     {
         $data = [
             'tingkat_kelas' => $this->input->post('tingkat_kelas'),
@@ -465,8 +545,57 @@ class Admin extends CI_Controller
     // get data alokasi _mapel
     public function data_alokasi_mapel()
     {
-        $data['alokasi_mapel'] = $this->m_model->get_alokasi_mapel('alokasi_mapel');
+        $data['alokasi_mapel'] = $this->m_model->get_alokasi_mapel();
         $this->load->view('admin/alokasi_mapel/data_alokasi_mapel', $data);
+    }
+
+    // tambah alokasi mapel
+    public function tambah_alokasi_mapel() {
+        $data['alokasi_mapel'] = $this->m_model->get_alokasi_mapel();
+        $data['mapel'] = $this->m_model->get_data('mapel')->result();
+        $data['kelas'] = $this->m_model->get_data('kelas')->result();
+        $this->load->view('admin/alokasi_mapel/tambah_alokasi_mapel', $data);
+    }
+    
+    public function aksi_tambah_alokasi_mapel() {
+        $data = [
+            "id_mapel" => $this->input->post('id_mapel'),
+            "id_kelas" => $this->input->post('id_kelas'),
+        ];
+        $eksekusi = $this->m_model->tambah_data('alokasi_mapel', $data);
+        if ($eksekusi) {
+            redirect(base_url('admin/data_alokasi_mapel'));
+        } else {
+            redirect(base_url('admin/tambah_alokasi_mapel'));
+        }
+    }
+
+    // hapus alokasi mapel 
+    public function hapus_alokasi_mapel($id) {
+        $this->m_model->delete('alokasi_mapel', 'id', $id);
+        redirect(base_url('admin/data_alokasi_mapel'));
+    }
+
+    // edit alokasi mapel
+    public function edit_alokasi_mapel($id) {
+        $data['edit_alokasi_mapel'] = $this->m_model->get_by_id('alokasi_mapel', 'id', $id)->result();
+        $data['mapel'] = $this->m_model->get_data('mapel')->result();
+        $data["kelas"] = $this->m_model->get_data('kelas')->result();
+        $this->load->view('admin/alokasi_mapel/edit_alokasi_mapel', $data);
+    }
+
+    //aksi edit alokasi mapel
+    public function aksi_edit_alokasi_mapel() {
+        $data = [
+            'id_mapel' => $this->input->post('id_mapel'),
+            'id_kelas' => $this->input->post('id_kelas'),
+        ];
+        $eksekusi = $this->m_model->ubah_data('alokasi_mapel', $data, array('id' => $this->input->post('id')));
+        if ($eksekusi) {
+            redirect(base_url('admin/edit_alokasi_mapel'));
+        } else {
+            redirect(base_url('admin/edit_alokasi_mapel/'. $this->imput->post('id')));
+        }
     }
 
     //function export
@@ -600,6 +729,8 @@ class Admin extends CI_Controller
             echo 'Invalid File';
         }
     }
+
+    
 
 
     //end Admin

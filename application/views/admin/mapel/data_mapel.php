@@ -15,7 +15,7 @@
     style="margin-left:20%; height:fit-content; margin-top:10px; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
     <div class="d-flex justify-content-between bg-gray">
       <h3 class="text-center">Data Mapel</h3>
-      <button class="btn btn-sm btn-primary">Tambah Data</button>
+      <button class="btn btn-sm btn-primary"><a href="tambah_mapel" style="color:white; text-decoration:none">Tambah Data</a></button>
     </div>
     <hr>
     <table class="table table-striped table-hover">
@@ -40,7 +40,7 @@
               <?= $row->nama_mapel; ?>
             </td>
             <td>
-              <a href="<?php echo base_url('admin/update_mapel/') . $row->id ?>"
+              <a href="<?php echo base_url('admin/edit_mapel/') . $row->id ?>"
                 class="btn btn-sm btn-primary">Edit</a>
               <button class="btn btn-sm btn-danger" onclick="hapus(<?php echo $row->id ?>)">Hapus</button>
             </td>

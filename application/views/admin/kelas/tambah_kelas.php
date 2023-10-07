@@ -35,7 +35,7 @@
                         <option selected>
                             Pilih Sekolah
                     </option>
-                        <?php foreach ($sekolah as $row): ?>
+                        <?php foreach ($sekolahh as $row): ?>
                             <optio">
                                 <?php echo $row->nama_sekolah ?>
                             <?php endforeach; ?>
@@ -48,7 +48,7 @@
                         <option selected>
                             Pilih Wali Kelas
                         </option>
-                        <?php foreach ($wali_kelas as $row): ?>
+                        <?php foreach ($guru_walikelas as $row): ?>
                             <optio">
                                 <?php echo $row->nama_guru ?>
                             <?php endforeach; ?>

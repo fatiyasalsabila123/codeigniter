@@ -15,7 +15,7 @@
     style="margin-left:20%; height:fit-content; margin-top:10px; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
     <div class="d-flex justify-content-between bg-gray">
       <h3 class="text-center">Data Sekolah</h3>
-      <button class="btn btn-sm btn-primary">Tambah Data</button>
+      <button class="btn btn-sm btn-primary"><a href="tambah_sekolah" style="color:white; text-decoration:none">Tambah Data</a></button>
     </div>
     <hr>
     <table class="table table-striped table-hover">
@@ -44,7 +44,7 @@
               <?= $row->alamat_sekolah; ?>
             </td>
             <td>
-              <a href="<?php echo base_url('admin/update_sekolah/') . $row->id ?>"
+              <a href="<?php echo base_url('admin/edit_sekolah/') . $row->id ?>"
                 class="btn btn-sm btn-primary">Edit</a>
               <button class="btn btn-sm btn-danger" onclick="hapus(<?php echo $row->id ?>)">Hapus</button>
             </td>
@@ -59,7 +59,7 @@
   function hapus(id) { // Fungsi JavaScript untuk mengkonfirmasi dan mengarahkan ke halaman "delete.php" dengan id yang akan dihapus.
     var yes = confirm("Yakin Di Hapus?");
     if (yes == true) {
-      window.location.href = "<?php echo base_url('admin/hapus_sekolah/') ?>" + id; // Mengarahkan ke halaman "hapus_guru.php" dengan mengirimkan id yang akan dihapus sebagai parameter.
+      window.location.href = "<?php echo base_url('admin/delete_sekolah/') ?>" + id; // Mengarahkan ke halaman "hapus_guru.php" dengan mengirimkan id yang akan dihapus sebagai parameter.
     }
   }
 </script>
